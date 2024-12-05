@@ -44,8 +44,7 @@ def create_email(user_data: dict, prompt: str) -> str:
         </head>
         <body>
             <h1>Sorry we didn't help you!</h1>
-            <h2>{response}</h2>
-            <h3>You weren't matched with a provider for your issue. Click below to find more relevant providers!</h3>
+            <h3>{response}</h3>
             <a href="https://three-ships.github.io/email-retargetting-hackathon/?first_name={first_name}" target="_blank"><button>Reignite🔥</button></a>
             <p style="position: fixed; bottom: 10px; width: 100%; text-align: center;">If you are not interested in having your house fixed, you can ignore and delete this email.</p>
         </body>
@@ -74,7 +73,7 @@ def handler():
     with open('data.json', 'r') as file:
         user_data = json.load(file)
     
-    prompt = f"respond with the word sorry." #TODO: make this say something sad about how we failed the user
+    prompt = "write me three sentences of an email to a consumer briefly apologizing for not connecting the user with a service provider, and explaining that we care. include the sentence \"click below to explore more providers!\" at the end. only return the email paragraph text." #TODO: make this say something sad about how we failed the user
 
     email_content = create_email(user_data, prompt)
     send_email([user_data["email"]], email_content)

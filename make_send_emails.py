@@ -73,7 +73,7 @@ def handler():
     with open('data.json', 'r') as file:
         user_data = json.load(file)
     
-    prompt = "write me three sentences of an email to a consumer briefly apologizing for not connecting the user with a service provider, and explaining that we care. include the sentence \"click below to explore more providers!\" at the end. only return the email paragraph text." #TODO: make this say something sad about how we failed the user
+    prompt = "write me three sentences of an email to a consumer briefly apologizing for not connecting the user with a service provider, and explaining that we care. include the sentence \"click below to explore more providers!\" at the end. only return the email paragraph text."
 
     email_content = create_email(user_data, prompt)
     send_email([user_data["email"]], email_content)

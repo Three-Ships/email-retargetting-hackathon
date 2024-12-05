@@ -30,7 +30,7 @@ def chat_w_chat_gpt(message: str) -> str:
         logging.info(f"Error chatting with chatGPT: {e}")
 
 # create email content
-def create_email(user_data: dict, prompt: str, template_path: str) -> str: 
+def create_email(user_data: dict, prompt: str) -> str: 
     first_name = user_data["first_name"]
     response = chat_w_chat_gpt(prompt)
     
@@ -74,10 +74,9 @@ def handler():
     with open('data.json', 'r') as file:
         user_data = json.load(file)
     
-    prompt = f"respond with the word sorry."
+    prompt = f"respond with the word sorry." #TODO: make this say something sad about how we failed the user
 
-    template_path = 'email_templates/basic_template.html'
-    email_content = create_email(user_data, prompt, template_path)
+    email_content = create_email(user_data, prompt)
     send_email([user_data["email"]], email_content)
     
 handler()

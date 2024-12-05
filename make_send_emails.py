@@ -29,12 +29,30 @@ def chat_w_chat_gpt(message: str) -> str:
     except Exception as e:
         logging.info(f"Error chatting with chatGPT: {e}")
 
-# create email content TODO: email html
-def create_email(user_data: dict, prompt: str) -> str: 
+# create email content
+def create_email(user_data: dict, prompt: str, template_path: str) -> str: 
     first_name = user_data["first_name"]
-
     response = chat_w_chat_gpt(prompt)
-    return response
+    
+    html_template = f"""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Sorry we didn't help you!</title>
+        </head>
+        <body>
+            <h1>Sorry we didn't help you!</h1>
+            <h2>{response}</h2>
+            <h3>You weren't matched with a provider for your issue. Click below to find more relevant providers!</h3>
+            <a href="https://three-ships.github.io/email-retargetting-hackathon/?first_name={first_name}" target="_blank"><button>Reignite🔥</button></a>
+            <p style="position: fixed; bottom: 10px; width: 100%; text-align: center;">If you are not interested in having your house fixed, you can ignore and delete this email.</p>
+        </body>
+        </html>
+    """
+    
+    return html_template
 
 # sends email to email in data using resend
 def send_email(emails: list[str], content: str) -> None:
@@ -56,9 +74,10 @@ def handler():
     with open('data.json', 'r') as file:
         user_data = json.load(file)
     
-    prompt = f"tell me hello (my name is {user_data['first_name']}) and write me a cool motivational quote."
+    prompt = f"respond with the word sorry."
 
-    email_content = create_email(user_data, prompt)
+    template_path = 'email_templates/basic_template.html'
+    email_content = create_email(user_data, prompt, template_path)
     send_email([user_data["email"]], email_content)
     
 handler()

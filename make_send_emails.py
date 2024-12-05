@@ -45,7 +45,8 @@ def create_email(user_data: dict, prompt: str) -> str:
         <body>
             <h1>Sorry we didn't help you!</h1>
             <h3>{response}</h3>
-            <a href="https://three-ships.github.io/email-retargetting-hackathon/?first_name={first_name}" target="_blank"><button>Reignite🔥</button></a>
+            <a href="https://three-ships.github.io/email-retargetting-hackathon/?first_name={first_name}" target="_blank">
+            <button style="font-size: 18px; padding: 15px 30px; border-radius: 8px; border: none; background-color: #4CAF50; color: white;">Reignite🔥</button></a>
             <p style="position: fixed; bottom: 10px; width: 100%; text-align: center;">If you are not interested in having your house fixed, you can ignore and delete this email.</p>
         </body>
         </html>
@@ -56,9 +57,9 @@ def create_email(user_data: dict, prompt: str) -> str:
 # sends email to email in data using resend
 def send_email(emails: list[str], content: str) -> None:
     params: resend.Emails.SendParams = {
-        "from": "dev test <onboarding@resend.dev>",
+        "from": "Reignite <onboarding@resend.dev>",
         "to": emails,
-        "subject": "hello",
+        "subject": "Sorry we didn't help you!",
         "html": content,
     }
 
@@ -73,8 +74,13 @@ def handler():
     with open('data.json', 'r') as file:
         user_data = json.load(file)
     
-    prompt = "write me three sentences of an email to a consumer briefly apologizing for not connecting the user with a service provider, and explaining that we care. include the sentence \"click below to explore more providers!\" at the end. only return the email paragraph text."
-
+    prompt = f"""
+    write me three sentences of an email to a consumer briefly apologizing for not connecting the user with a service provider, and explaining that we care. 
+    start with "Hello, {user_data["first_name"]}!"
+    include the sentence "click below to explore more providers!" at the end. 
+    only return the three sentences with no other formatting or greeting.
+    """
+    
     email_content = create_email(user_data, prompt)
     send_email([user_data["email"]], email_content)
     
